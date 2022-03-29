@@ -33,10 +33,5 @@ echo -e "\n\n"
 
 for disk in $MDS_DISK_NAME ${CS_DISK_LIST[@]}
     do
-        case $(get_disk_type $disk) in
-            1) d_type="hdd";;
-            0) d_type="ssd";;
-            *) d_type="error"
-        esac
-        echo /dev/$disk $d_type $(get_disk_role $disk)
+        echo /dev/$disk $(get_disk_type $disk print) $(get_disk_role $disk)
     done
