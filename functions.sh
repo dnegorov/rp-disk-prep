@@ -3,7 +3,7 @@
 # Get disk type
 # return 0 for ssd
 # return 1 for hdd
-# emty if erorr
+# empty if erorr
 function get_disk_type() {
     if [ -n $1 ] && [ -e /sys/block/$1/queue/rotational ]
         then
