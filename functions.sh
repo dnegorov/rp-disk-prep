@@ -22,5 +22,5 @@ function get_disk_type() {
     fi
 }
 
-echo $(get_disk_type sda) = $(get_disk_type sda print)
-echo $(get_disk_type sdz) = $(get_disk_type sdz print)
+# echo $(get_disk_type sda) = $(get_disk_type sda print)
+# echo $(get_disk_type sdz) = $(get_disk_type sdz print)
