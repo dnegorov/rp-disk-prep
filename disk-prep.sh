@@ -85,7 +85,7 @@ if [[ ${SCRIPT_GENERATOR^^} == "RUN" ]]
         ALERT_COLOR="\033[33;1;5;7m"
     fi
 
-echo -e "\n\n"
+echo -e "\n"
 echo -e "# "$(date)
 echo -e "#"
 echo -e "# PARAMETERS:"
@@ -103,7 +103,7 @@ echo -e "\n"
 
 # sleep 3s
 
-fmt='#\x20%-12s%-8s%-6s%-6s%-8s%-24s\n'
+fmt='#\x20%-12s%-8s%-6s%-6s%-8s%-s\n'
 printf $fmt DISK SIZE TYPE ROLE MOUNT_POINT
 for disk in $MDS_DISK_NAME ${CS_DISK_LIST[@]}
     do
@@ -136,11 +136,22 @@ for disk in $MDS_DISK_NAME ${CS_DISK_LIST[@]}
 echo -e "\n# Prepare /etc/fstab"
 for disk in $MDS_DISK_NAME ${CS_DISK_LIST[@]}
     do
+        fstab_param=$HDD_FSTAB_TEMPLATE
         if [[ $(get_disk_type $disk print) == "ssd" ]]
             then
-                $fstab_param=$SSD_FSTAB_TEMPLATE
-            else
-                $fstab_param=$HDD_FSTAB_TEMPLATE
+                fstab_param=$SSD_FSTAB_TEMPLATE
             fi
-        $RUN echo -e "$(blkid | grep /dev/$disk| awk '{print $2}')	/vstorage/$vstor_name-mds"$fstab_param >> ./fstab
+        if [[ ${SCRIPT_GENERATOR^^} == "RUN" ]]
+            then
+                echo -e $(blkid | grep /dev/$disk | awk '{print $2}')"    "$(set_mount_point $disk)"    "$fstab_param >> /etc/fstab
+            else
+                get_uuid='$(blkid | grep /dev/'$disk" | awk '{print "'$2'"}')"
+                $RUN echo -e $get_uuid"    "$(set_mount_point $disk)"    "$fstab_param" >> /etc/fstab"
+            fi
     done
+
+# Mount all disks
+echo -e "\n# Mount all disks"
+$RUN mount -a
+
+
