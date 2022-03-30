@@ -22,5 +22,21 @@ function get_disk_type() {
     fi
 }
 
+# Get disk size
+# return: size in human readable format (100G 1024M) or empty if error
+# params: disk name "sdb"
+# echo $(get_disk_size sdb)
+function get_disk_size() {
+    lsblk | grep $1 | awk '{ print $4 }'
+}
+
+
+# TESTS
+
+# get_disk_type
 # echo $(get_disk_type sda) = $(get_disk_type sda print)
 # echo $(get_disk_type sdz) = $(get_disk_type sdz print)
+
+# get_disk_size
+# echo sdb $(get_disk_size sdb)
+# echo sdzz $(get_disk_size sdzz)
