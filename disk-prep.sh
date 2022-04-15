@@ -125,7 +125,7 @@ for disk in $MDS_DISK_NAME ${CS_DISK_LIST[@]}
     do
         if [[ $(get_disk_type $disk print) == "ssd" ]]
             then
-                params=$DISK_PREPARE_PARAM+" --ssd"
+                params=$DISK_PREPARE_PARAM" --ssd"
             else
                 params=$DISK_PREPARE_PARAM
             fi
